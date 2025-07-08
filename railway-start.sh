@@ -2,6 +2,16 @@
 
 echo "🚂 Railway QloApps Startup Script"
 
+# Set default port if not provided
+export PORT=${PORT:-80}
+echo "🔌 Using port: $PORT"
+
+# Update Apache configuration with the dynamic port
+sed -i "s/\${PORT}/$PORT/g" /etc/apache2/sites-available/railway.conf
+
+# Configure Apache to listen on the dynamic port
+echo "Listen $PORT" > /etc/apache2/ports.conf
+
 # Check if settings.inc.php exists, if not, copy from Railway template
 if [ ! -f "/var/www/html/config/settings.inc.php" ]; then
     echo "📋 Creating settings.inc.php from Railway template..."

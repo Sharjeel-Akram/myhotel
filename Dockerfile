@@ -34,12 +34,26 @@ RUN chown -R www-data:www-data /var/www/html \
 # Create .htaccess for URL rewriting
 RUN echo "RewriteEngine On\nRewriteCond %{REQUEST_FILENAME} !-f\nRewriteCond %{REQUEST_FILENAME} !-d\nRewriteRule ^(.*)$ index.php [QSA,L]" > /var/www/html/.htaccess
 
+# Create Apache configuration for Railway
+RUN echo '<VirtualHost *:${PORT}>\n\
+    DocumentRoot /var/www/html\n\
+    ServerName localhost\n\
+    <Directory /var/www/html>\n\
+        AllowOverride All\n\
+        Require all granted\n\
+    </Directory>\n\
+    ErrorLog ${APACHE_LOG_DIR}/error.log\n\
+    CustomLog ${APACHE_LOG_DIR}/access.log combined\n\
+</VirtualHost>' > /etc/apache2/sites-available/railway.conf \
+    && a2dissite 000-default \
+    && a2ensite railway
+
 # Copy and make startup script executable
 COPY railway-start.sh /usr/local/bin/railway-start.sh
 RUN chmod +x /usr/local/bin/railway-start.sh
 
-# Expose port 80
-EXPOSE 80
+# Expose the PORT environment variable
+EXPOSE $PORT
 
 # Start with our custom script
 CMD ["/usr/local/bin/railway-start.sh"]
