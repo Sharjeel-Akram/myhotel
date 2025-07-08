@@ -1,0 +1,41 @@
+# Git
+.git
+.gitignore
+
+# Documentation
+*.md
+DEPLOYMENT.md
+README.md
+CHANGELOG.txt
+CONTRIBUTING.md
+SECURITY.md
+LICENSE.md
+
+# Development files
+.env.example
+deploy.sh
+
+# Cache and temporary files
+cache/*
+!cache/index.php
+log/*
+!log/index.php
+upload/*
+!upload/index.php
+download/*
+!download/index.php
+
+# Backups
+*.sql
+*.backup
+*.bak
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# IDE files
+.vscode
+.idea
+*.swp
+*.swo

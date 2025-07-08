@@ -39,20 +39,27 @@ git push -u origin main
    - Select "Deploy from GitHub repo"
    - Choose your QloApps repository
 
-3. **Add MySQL Database**:
+3. **Important - Force Docker Build**:
+   - Go to your project **Settings** → **Environment**
+   - Add this environment variable:
+     - `RAILWAY_DOCKERFILE_PATH`: `Dockerfile`
+   - This ensures Railway uses Docker instead of auto-detection
+
+4. **Add MySQL Database**:
    - In your Railway project dashboard
    - Click "New" → "Database" → "Add MySQL"
    - Railway will automatically create a MySQL database
 
-4. **Environment Variables**:
+5. **Environment Variables**:
    Railway will automatically set database environment variables. You can add custom ones:
    - `PS_COOKIE_KEY`: Generate a random 32-character string
    - `PS_COOKIE_IV`: Generate a random 8-character string
    - `PS_RIJNDAEL_KEY`: Generate a random 32-character string
    - `PS_RIJNDAEL_IV`: Generate a random 16-character string
 
-5. **Deploy**:
-   - Railway will automatically build and deploy your application
+6. **Deploy**:
+   - Railway will automatically build and deploy your application using Docker
+   - Build time: 5-10 minutes for first deployment
    - You'll get a public URL like: `your-app-name.up.railway.app`
 
 ### Step 3: Initial Setup
@@ -77,7 +84,8 @@ git push -u origin main
 - Connect your GitHub repository
 - Use these settings:
   - **Build Command**: `chmod +x deploy.sh && ./deploy.sh`
-  - **Start Command**: `php -S 0.0.0.0:$PORT -t .`
+  - **Start Command**: `apache2-foreground`
+  - **Dockerfile Path**: `Dockerfile`
 
 ### Step 3: Add Database
 - Create a PostgreSQL database on Render
